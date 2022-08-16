@@ -1,0 +1,17 @@
+name: collapsible_app_bar
+description: An app bar widget that is collapsible.
+version: 0.0.1
+homepage: https://github.com/aJIEw/collapsible_app_bar
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
