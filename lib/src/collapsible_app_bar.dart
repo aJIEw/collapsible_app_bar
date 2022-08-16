@@ -6,11 +6,14 @@ import 'package:collapsible_app_bar/src/action_button.dart';
 import 'package:flutter/material.dart';
 
 import 'back_button.dart';
+import 'content_wrapper.dart';
 
 class CollapsibleAppBar extends StatefulWidget {
   const CollapsibleAppBar({
     Key? key,
+    this.leadingIcon,
     this.onPressedBack,
+    this.hideLeadingIcon = false,
     this.shrinkTitle,
     this.shrinkTitleStyle,
     this.centerTitle = true,
@@ -18,15 +21,20 @@ class CollapsibleAppBar extends StatefulWidget {
     this.forceElevated = false,
     this.pinned = true,
     this.actions,
-    this.scrollShrinkThreshold = 250,
+    this.scrollShrinkThreshold = 150,
     required this.expandedHeight,
     this.flexibleSpace,
     required this.headerBottom,
     required this.body,
+    this.bottomHeight = 24,
     this.userWrapper = true,
   }) : super(key: key);
 
+  final Widget? leadingIcon;
+
   final VoidCallback? onPressedBack;
+
+  final bool hideLeadingIcon;
 
   final String? shrinkTitle;
 
@@ -52,6 +60,8 @@ class CollapsibleAppBar extends StatefulWidget {
 
   final Widget body;
 
+  final double bottomHeight;
+
   final bool userWrapper;
 
   @override
@@ -59,8 +69,6 @@ class CollapsibleAppBar extends StatefulWidget {
 }
 
 class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
-  static const headerBottomSize = 48.0;
-
   ScrollController scrollController = ScrollController();
 
   bool isShrink = false;
@@ -107,20 +115,10 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
             elevation: widget.elevation,
             forceElevated: widget.forceElevated,
             pinned: widget.pinned,
-            leading: AdaptableBackButton(
-              showBackground: !isShrink,
-              onPressedBack: widget.onPressedBack,
-            ),
-            actions: widget.actions
-                ?.map((btn) =>
-                    ActionButton(showBackground: !isShrink, child: btn))
-                .toList(),
-            expandedHeight:
-                widget.expandedHeight + (Platform.isAndroid ? 20 : 0),
-            title: Text(isShrink ? widget.shrinkTitle ?? '' : '',
-                style: widget.shrinkTitleStyle ??
-                    const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.normal)),
+            leading: _buildLeading(),
+            title: _buildShrinkTitle(),
+            actions: _buildActions(),
+            expandedHeight: _buildExpandedHeight(),
             flexibleSpace: _buildFlexibleSpace(context),
             bottom: _buildHeaderBottom(context),
           ),
@@ -129,6 +127,31 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
       body: _buildBodyContent(context),
     );
   }
+
+  Widget? _buildLeading() => widget.hideLeadingIcon
+      ? null
+      : AdaptableBackButton(
+          showBackground: !isShrink,
+          onPressedBack: widget.onPressedBack,
+          child: widget.leadingIcon,
+        );
+
+  Widget? _buildShrinkTitle() => Text(
+        isShrink ? widget.shrinkTitle ?? '' : '',
+        style: widget.shrinkTitleStyle ??
+            const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
+      );
+
+  List<Widget>? _buildActions() => widget.actions
+      ?.map((btn) => ActionButton(showBackground: !isShrink, child: btn))
+      .toList();
+
+  /// On Android, add extra height for status bar, default to 24
+  double? _buildExpandedHeight() =>
+      widget.expandedHeight + (Platform.isAndroid ? 24 : 0);
 
   Widget _buildFlexibleSpace(BuildContext context) {
     return FlexibleSpaceBar(
@@ -139,28 +162,14 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
 
   PreferredSizeWidget _buildHeaderBottom(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(headerBottomSize),
+      preferredSize: Size.fromHeight(widget.bottomHeight),
       child: widget.headerBottom,
     );
   }
 
   Widget _buildBodyContent(BuildContext context) {
     return widget.userWrapper
-        ? scrollContentWrapper(context, child: widget.body)
+        ? ScrollContentWrapper(child: widget.body)
         : widget.body;
-  }
-
-  Widget scrollContentWrapper(BuildContext context, {required Widget child}) {
-    return Builder(builder: (context) {
-      return CustomScrollView(
-        slivers: [
-          SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-          SliverToBoxAdapter(
-            child: child,
-          ),
-        ],
-      );
-    });
   }
 }
