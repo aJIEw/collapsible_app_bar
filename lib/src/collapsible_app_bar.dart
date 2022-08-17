@@ -84,6 +84,7 @@ class CollapsibleAppBar extends StatefulWidget {
   final double bottomHeight;
 
   /// Whether to use [ScrollContentWrapper] or not, defaults to true.
+  ///
   /// If you are using tab bar, then you may set this to false, and use
   /// [ScrollContentWrapper] to wrap your tab bar view's children.
   final bool userWrapper;

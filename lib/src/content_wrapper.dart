@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This is a wrapper widget that handles the header's overlap area.
 class ScrollContentWrapper extends StatelessWidget {
   const ScrollContentWrapper({Key? key, required this.child}) : super(key: key);
 

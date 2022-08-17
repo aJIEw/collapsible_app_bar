@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.pink,
+        highlightColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
       ),
