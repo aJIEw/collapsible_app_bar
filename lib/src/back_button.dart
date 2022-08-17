@@ -6,7 +6,7 @@ class AdaptableBackButton extends StatelessWidget {
     this.showBackground = false,
     this.backgroundColor,
     this.onPressedBack,
-    this.child,
+    this.icon,
   }) : super(key: key);
 
   final bool showBackground;
@@ -15,7 +15,7 @@ class AdaptableBackButton extends StatelessWidget {
 
   final VoidCallback? onPressedBack;
 
-  final Widget? child;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,8 @@ class AdaptableBackButton extends StatelessWidget {
               ? backgroundColor ?? Colors.black38
               : Colors.transparent,
         ),
-        child: child ?? Icon(
-          Icons.arrow_back_ios_rounded,
+        child: Icon(
+          icon ?? Icons.arrow_back_ios_rounded,
           color: showBackground ? Colors.white : Colors.grey[700],
           size: 20,
         ),

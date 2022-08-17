@@ -24,45 +24,72 @@ class CollapsibleAppBar extends StatefulWidget {
     this.scrollShrinkThreshold = 150,
     required this.expandedHeight,
     this.flexibleSpace,
-    required this.headerBottom,
-    required this.body,
+    this.headerBottom,
     this.bottomHeight = 24,
     this.userWrapper = true,
+    required this.body,
   }) : super(key: key);
 
-  final Widget? leadingIcon;
+  /// If not specified, [Icons.arrow_back_ios_rounded] will be used.
+  final IconData? leadingIcon;
 
+  /// Callback for leading icon click.
   final VoidCallback? onPressedBack;
 
+  /// Don't display leading icon, defaults to false.
   final bool hideLeadingIcon;
 
+  /// String title when app bar is collapsed.
   final String? shrinkTitle;
 
   final TextStyle? shrinkTitleStyle;
 
+  /// Whether the title is center displayed, defaults to true.
   final bool centerTitle;
 
+  /// The app bar elevation.
   final double? elevation;
 
+  /// Defaults to false.
   final bool forceElevated;
 
+  /// Whether the app bar is pinned after collapsed, defaults to true.
   final bool pinned;
 
+  /// The [actions] widgets will be wrapped with [ActionButton],
+  /// so that they will have a translucent background when expanded.
   final List<Widget>? actions;
 
+  /// This determines when is the app bar considered collapsed, defaults to 150.
+  ///
+  /// If your [flexibleSpace] widget's height is much smaller or larger then this,
+  /// then you may consider to adjust this property.
   final double scrollShrinkThreshold;
 
+  /// This is the height of the [flexibleSpace] when expanded. You should set
+  /// this value according to the height of your [flexibleSpace].
   final double expandedHeight;
 
+  /// The widget inside a pinned [FlexibleSpaceBar], the header.
   final Widget? flexibleSpace;
 
-  final Widget headerBottom;
+  /// The [AppBar.bottom] widget in case you want to have a sticky bottom at the
+  /// bottom of the app bar, e.g. when you have a tab bar under app bar.
+  final Widget? headerBottom;
 
-  final Widget body;
-
+  /// The height of the [headerBottom] widget, defaults to 24.
+  ///
+  /// This only determines how tall it will look like when collapsed,
+  /// because when expanded, the height is not restricted at all.
   final double bottomHeight;
 
+  /// Whether to use [ScrollContentWrapper] or not, defaults to true.
+  /// If you are using tab bar, then you may set this to false, and use
+  /// [ScrollContentWrapper] to wrap your tab bar view's children.
   final bool userWrapper;
+
+  /// The body under the app bar.
+  final Widget body;
 
   @override
   State<CollapsibleAppBar> createState() => _CollapsibleAppBarState();
@@ -133,7 +160,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
       : AdaptableBackButton(
           showBackground: !isShrink,
           onPressedBack: widget.onPressedBack,
-          child: widget.leadingIcon,
+          icon: widget.leadingIcon,
         );
 
   Widget? _buildShrinkTitle() => Text(
@@ -160,11 +187,13 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
     );
   }
 
-  PreferredSizeWidget _buildHeaderBottom(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(widget.bottomHeight),
-      child: widget.headerBottom,
-    );
+  PreferredSizeWidget? _buildHeaderBottom(BuildContext context) {
+    return widget.headerBottom != null
+        ? PreferredSize(
+            preferredSize: Size.fromHeight(widget.bottomHeight),
+            child: widget.headerBottom!,
+          )
+        : null;
   }
 
   Widget _buildBodyContent(BuildContext context) {

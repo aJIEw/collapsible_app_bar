@@ -1,7 +1,7 @@
 name: collapsible_app_bar
-description: An app bar widget that is collapsible.
+description: A widget that has a collapsible app bar.
 version: 0.0.1
-homepage: https://github.com/aJIEw/collapsible_app_bar
+repository: https://github.com/aJIEw/collapsible_app_bar
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
