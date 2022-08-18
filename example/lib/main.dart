@@ -57,6 +57,8 @@ class _CollapsibleAppBarPageState extends State<CollapsibleAppBarPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
+  bool appBarCollapsed = false;
+
   @override
   void initState() {
     super.initState();
@@ -68,22 +70,37 @@ class _CollapsibleAppBarPageState extends State<CollapsibleAppBarPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: CollapsibleAppBar(
+        // Callback after the leading icon is clicked, usually go back.
         onPressedBack: () {
           Navigator.pop(context);
         },
+        // The title text displayed when the app bar is collapsed.
         shrinkTitle: 'Do you like it?',
         forceElevated: true,
         elevation: 0.3,
+        // We can listen for the collapsed status change.
+        onChange: (collapsed) {
+          setState(() {
+            appBarCollapsed = collapsed;
+          });
+        },
+        // Set the header's height, this must be set according to your header's height.
         expandedHeight: 250,
+        // The header can be any widget, as long as its height is in bound.
+        header: _buildHeader(context),
+        // Here we use TabBar as the header bottom, and we will use the default heightBottomHeight.
         headerBottom: _buildHeaderBottom(context),
-        flexibleSpace: _buildFlexibleSpace(context),
+        // The body contains TabBarView so we don't want to use ScrollContentWrapper,
+        // but we should use wrapper for the children of the TabBarView in order
+        // to avoid the overlap of the body's content.
         userWrapper: false,
         body: _buildBody(context),
       ),
+      floatingActionButton: _buildFab(context),
     );
   }
 
-  Widget _buildFlexibleSpace(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Column(
@@ -131,6 +148,21 @@ class _CollapsibleAppBarPageState extends State<CollapsibleAppBarPage>
         Text('Tab Two'),
         Text('Tab Three'),
       ],
+    );
+  }
+
+  Widget _buildFab(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                'The App Bar is ${appBarCollapsed ? 'COLLAPSED' : 'EXPANDED'}')));
+      },
+      child: Icon(
+        appBarCollapsed
+            ? Icons.arrow_circle_up_outlined
+            : Icons.arrow_circle_down_outlined,
+      ),
     );
   }
 

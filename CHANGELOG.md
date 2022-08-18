@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Rename property names
+
 ## 0.1.1
 
 * Add onChange callback

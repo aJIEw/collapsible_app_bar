@@ -2,6 +2,8 @@
 
 A widget that has a collapsible app bar.
 
+[![pub package](https://img.shields.io/pub/v/collapsible_app_bar?color=blue)](https://pub.dev/packages/collapsible_app_bar)
+
 <details><summary>Click to view Screenshots</summary>
 
 | Expanded                                     | Collapsed                                      |
@@ -15,7 +17,7 @@ Add dependency in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  collapsible_app_bar: ^0.1.0
+  collapsible_app_bar: ^0.1.2
 ```
 
 Run `flutter pub get` to install the package.

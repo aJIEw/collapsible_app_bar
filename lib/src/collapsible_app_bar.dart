@@ -21,11 +21,11 @@ class CollapsibleAppBar extends StatefulWidget {
     this.pinned = true,
     this.actions,
     this.onChange,
-    this.scrollShrinkThreshold = 150,
+    this.shrinkThreshold = 150,
     required this.expandedHeight,
-    this.flexibleSpace,
+    this.header,
     this.headerBottom,
-    this.bottomHeight = 24,
+    this.headerBottomHeight = 24,
     this.userWrapper = true,
     required this.body,
   }) : super(key: key);
@@ -65,16 +65,16 @@ class CollapsibleAppBar extends StatefulWidget {
 
   /// This determines when is the app bar considered collapsed, defaults to 150.
   ///
-  /// If your [flexibleSpace] widget's height is much smaller or larger then this,
+  /// If your [header] widget's height is much smaller or larger then this,
   /// then you may consider to adjust this property.
-  final double scrollShrinkThreshold;
+  final double shrinkThreshold;
 
-  /// This is the height of the [flexibleSpace] when expanded. You should set
-  /// this value according to the height of your [flexibleSpace].
+  /// This is the height of the [header] when expanded. You should set
+  /// this value according to the height of your [header].
   final double expandedHeight;
 
   /// The widget inside a pinned [FlexibleSpaceBar], the header.
-  final Widget? flexibleSpace;
+  final Widget? header;
 
   /// The [AppBar.bottom] widget in case you want to have a sticky bottom at the
   /// bottom of the app bar, e.g. when you have a tab bar under app bar.
@@ -84,7 +84,7 @@ class CollapsibleAppBar extends StatefulWidget {
   ///
   /// This only determines how tall it will look like when collapsed,
   /// because when expanded, the height is not restricted at all.
-  final double bottomHeight;
+  final double headerBottomHeight;
 
   /// Whether to use [ScrollContentWrapper] or not, defaults to true.
   ///
@@ -107,7 +107,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
   bool get _isShrink {
     return scrollController.hasClients &&
         scrollController.offset >
-            (widget.scrollShrinkThreshold - kToolbarHeight);
+            (widget.shrinkThreshold - kToolbarHeight);
   }
 
   @override
@@ -184,14 +184,14 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
   Widget _buildFlexibleSpace(BuildContext context) {
     return FlexibleSpaceBar(
       collapseMode: CollapseMode.pin,
-      background: widget.flexibleSpace,
+      background: widget.header,
     );
   }
 
   PreferredSizeWidget? _buildHeaderBottom(BuildContext context) {
     return widget.headerBottom != null
         ? PreferredSize(
-            preferredSize: Size.fromHeight(widget.bottomHeight),
+            preferredSize: Size.fromHeight(widget.headerBottomHeight),
             child: widget.headerBottom!,
           )
         : null;
