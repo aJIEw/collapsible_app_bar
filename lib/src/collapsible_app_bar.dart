@@ -2,7 +2,6 @@ library collapsible_app_bar;
 
 import 'dart:io';
 
-import 'package:collapsible_app_bar/src/action_button.dart';
 import 'package:flutter/material.dart';
 
 import 'back_button.dart';
@@ -13,7 +12,7 @@ class CollapsibleAppBar extends StatefulWidget {
     Key? key,
     this.leadingIcon,
     this.onPressedBack,
-    this.hideLeadingIcon = false,
+    this.customLeading,
     this.shrinkTitle,
     this.shrinkTitleStyle,
     this.centerTitle = true,
@@ -21,6 +20,7 @@ class CollapsibleAppBar extends StatefulWidget {
     this.forceElevated = false,
     this.pinned = true,
     this.actions,
+    this.onChange,
     this.scrollShrinkThreshold = 150,
     required this.expandedHeight,
     this.flexibleSpace,
@@ -36,8 +36,9 @@ class CollapsibleAppBar extends StatefulWidget {
   /// Callback for leading icon click.
   final VoidCallback? onPressedBack;
 
-  /// Don't display leading icon, defaults to false.
-  final bool hideLeadingIcon;
+  /// Use custom leading widget, you can customize it based on app bar
+  /// collapsed status with the help of [onChange] callback.
+  final Widget? customLeading;
 
   /// String title when app bar is collapsed.
   final String? shrinkTitle;
@@ -56,9 +57,11 @@ class CollapsibleAppBar extends StatefulWidget {
   /// Whether the app bar is pinned after collapsed, defaults to true.
   final bool pinned;
 
-  /// The [actions] widgets will be wrapped with [ActionButton],
-  /// so that they will have a translucent background when expanded.
+  /// [AppBar.actions] for the app bar.
   final List<Widget>? actions;
+
+  /// App bar status change callback, true for collapsed, false for expanded.
+  final ValueChanged<bool>? onChange;
 
   /// This determines when is the app bar considered collapsed, defaults to 150.
   ///
@@ -127,6 +130,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
       setState(() {
         isShrink = cached;
       });
+      widget.onChange?.call(isShrink);
     }
   }
 
@@ -145,7 +149,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
             pinned: widget.pinned,
             leading: _buildLeading(),
             title: _buildShrinkTitle(),
-            actions: _buildActions(),
+            actions: widget.actions,
             expandedHeight: _buildExpandedHeight(),
             flexibleSpace: _buildFlexibleSpace(context),
             bottom: _buildHeaderBottom(context),
@@ -156,13 +160,13 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
     );
   }
 
-  Widget? _buildLeading() => widget.hideLeadingIcon
-      ? null
-      : AdaptableBackButton(
-          showBackground: !isShrink,
-          onPressedBack: widget.onPressedBack,
-          icon: widget.leadingIcon,
-        );
+  Widget? _buildLeading() =>
+      widget.customLeading ??
+      AdaptableBackButton(
+        showBackground: !isShrink,
+        onPressedBack: widget.onPressedBack,
+        icon: widget.leadingIcon,
+      );
 
   Widget? _buildShrinkTitle() => Text(
         isShrink ? widget.shrinkTitle ?? '' : '',
@@ -172,10 +176,6 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
       );
-
-  List<Widget>? _buildActions() => widget.actions
-      ?.map((btn) => ActionButton(showBackground: !isShrink, child: btn))
-      .toList();
 
   /// On Android, add extra height for status bar, default to 24
   double? _buildExpandedHeight() =>

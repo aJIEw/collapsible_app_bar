@@ -1,3 +1,8 @@
+## 0.1.1
+
+* Add onChange callback
+* Support custom leading widget and actions.
+
 ## 0.1.0
 
 * Update api doc.
