@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Fix back button click issue (change to HitTestBehavior.opaque)
+
 ## 0.1.2
 
 * Rename property names

@@ -17,7 +17,7 @@ Add dependency in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  collapsible_app_bar: ^0.1.2
+  collapsible_app_bar: ^0.1.3
 ```
 
 Run `flutter pub get` to install the package.

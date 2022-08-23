@@ -20,6 +20,7 @@ class AdaptableBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.all(12),
