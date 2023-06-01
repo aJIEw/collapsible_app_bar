@@ -24,6 +24,7 @@ class CollapsibleAppBar extends StatefulWidget {
     this.shrinkThreshold = 150,
     required this.expandedHeight,
     this.header,
+    this.shrinkColor,
     this.headerBottom,
     this.headerBottomHeight = 24,
     this.userWrapper = true,
@@ -32,6 +33,7 @@ class CollapsibleAppBar extends StatefulWidget {
 
   /// If not specified, [Icons.arrow_back_ios_rounded] will be used.
   final IconData? leadingIcon;
+  final Color? shrinkColor;
 
   /// Callback for leading icon click.
   final VoidCallback? onPressedBack;
@@ -106,8 +108,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
 
   bool get _isShrink {
     return scrollController.hasClients &&
-        scrollController.offset >
-            (widget.shrinkThreshold - kToolbarHeight);
+        scrollController.offset > (widget.shrinkThreshold - kToolbarHeight);
   }
 
   @override
@@ -142,7 +143,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
         SliverOverlapAbsorber(
           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
           sliver: SliverAppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: widget.shrinkColor ?? Colors.white,
             centerTitle: widget.centerTitle,
             elevation: widget.elevation,
             forceElevated: widget.forceElevated,
