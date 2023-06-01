@@ -13,6 +13,7 @@ class CollapsibleAppBar extends StatefulWidget {
     this.leadingIcon,
     this.onPressedBack,
     this.customLeading,
+    this.backgroundColor,
     this.shrinkTitle,
     this.shrinkTitleStyle,
     this.centerTitle = true,
@@ -39,6 +40,9 @@ class CollapsibleAppBar extends StatefulWidget {
   /// Use custom leading widget, you can customize it based on app bar
   /// collapsed status with the help of [onChange] callback.
   final Widget? customLeading;
+
+  /// AppBar's background color, defaults to [Colors.white].
+  final Color? backgroundColor;
 
   /// String title when app bar is collapsed.
   final String? shrinkTitle;
@@ -106,8 +110,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
 
   bool get _isShrink {
     return scrollController.hasClients &&
-        scrollController.offset >
-            (widget.shrinkThreshold - kToolbarHeight);
+        scrollController.offset > (widget.shrinkThreshold - kToolbarHeight);
   }
 
   @override
@@ -142,7 +145,7 @@ class _CollapsibleAppBarState extends State<CollapsibleAppBar> {
         SliverOverlapAbsorber(
           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
           sliver: SliverAppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: widget.backgroundColor ?? Colors.white,
             centerTitle: widget.centerTitle,
             elevation: widget.elevation,
             forceElevated: widget.forceElevated,

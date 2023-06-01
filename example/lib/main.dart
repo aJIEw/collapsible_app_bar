@@ -154,6 +154,7 @@ class _CollapsibleAppBarPageState extends State<CollapsibleAppBarPage>
   Widget _buildFab(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
                 'The App Bar is ${appBarCollapsed ? 'COLLAPSED' : 'EXPANDED'}')));

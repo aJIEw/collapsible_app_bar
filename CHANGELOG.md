@@ -1,3 +1,7 @@
+## 0.1.4
+
+* Add support for custom background color.
+
 ## 0.1.3
 
 * Fix back button click issue (change to HitTestBehavior.opaque)

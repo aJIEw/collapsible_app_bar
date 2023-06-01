@@ -12,7 +12,8 @@ class ScrollContentWrapper extends StatelessWidget {
       return CustomScrollView(
         slivers: [
           SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          ),
           SliverToBoxAdapter(
             child: child,
           ),
